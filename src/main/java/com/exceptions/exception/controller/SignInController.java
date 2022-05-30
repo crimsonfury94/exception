@@ -23,28 +23,27 @@ public class SignInController {
     }
 
 
-
     @GetMapping(path = "/")
-    public static boolean signInAccount(String login,
-                                         String password,
-                                        String confirmPassword) {
+    public static String signInAccount(@RequestParam(value = "login") String login,
+                                       @RequestParam(value = "password") String password,
+                                       @RequestParam(value = "confirmPassword") String confirmPassword) {
 
         try {
-            if (login.length() <= 20 || password.length() < 20 || password.equals(confirmPassword)) {
-                return true;
-            } else if (Pattern.matches("[a-zA-Z0-9_]+", login) || Pattern.matches("[a-zA-Z0-9_]+", password) || Pattern.matches("[a-zA-Z0-9_]+", confirmPassword)) {
-                return true;
-            }
+            if ((login.length() <= 20 && Pattern.matches("[a-zA-Z0-9_]+", login)) || (password.length() < 20 && Pattern.matches("[a-zA-Z0-9_]+", password)) || (password.equals(confirmPassword) && Pattern.matches("[a-zA-Z0-9_]+", confirmPassword))) {
+                return "true";
+            } //else if (Pattern.matches("[a-zA-Z0-9_]+", login) && Pattern.matches("[a-zA-Z0-9_]+", password) || Pattern.matches("[a-zA-Z0-9_]+", confirmPassword)) {
+            // return "true";
+            // }
+        } catch (WrongPasswordException e) {
+            if (password.length() > 20 || !password.equals(confirmPassword))
+                return "false";
         } catch (WrongLoginException e) {
             if (login.length() > 20)
-                return false;
-        } catch (WrongPasswordException e) {
-            if (password.length() > 20 || !password.equals(confirmPassword)) {
-                return false;
-            }
+                return "false";
         }
-        return true;
+        return "blyat";
     }
+
 
     @GetMapping(path = "/welcome")
     public String signIn(@RequestParam(value = "login") String login,
