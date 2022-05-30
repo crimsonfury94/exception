@@ -41,7 +41,7 @@ public class SignInController {
             if (login.length() > 20)
                 return "false";
         }
-        return "blyat";
+        return "Введите данные";
     }
 
 
